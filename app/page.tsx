@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 
 import { Grid, Typography, Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import CelebrationIcon from '@mui/icons-material/Celebration';
 
 import { NameList, CompatibillityToOthers } from './PropsType';
@@ -184,9 +184,11 @@ const Main:NextPage = () => {
                 })
               }
               <Button
-                startIcon={<AddIcon/>}
+                endIcon={<AddBoxIcon/>}
+                // variant="outlined"
                 onClick={()=>{addNameList()}}
               >
+                人数を増やす
               </Button> 
             </Grid>
             <Grid
