@@ -161,7 +161,7 @@ const Main:NextPage = () => {
               item
               xl={1}
             >
-              <Typography variant='h4' sx={{color:"black"}}>〜名前を入力〜</Typography>
+              <Typography variant='h5' sx={{color:"black",m:1}}>〜名前と相性を入力〜</Typography>
             </Grid>
             <Grid
               item
@@ -204,6 +204,7 @@ const Main:NextPage = () => {
               >
                 席決め！
               </Button>
+              <Typography variant='h6' sx={{color:"black"}}>※座席決めは現在開発中のため、<br/>完全ランダムとなっています。</Typography>
             </Grid>
           </Grid>
         </Grid>
