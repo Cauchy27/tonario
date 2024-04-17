@@ -225,6 +225,7 @@ const Main:NextPage = () => {
               columns.map((column,key_col)=>{
                 return(
                   <Grid
+                    key={key_col}
                     item
                     xs={1}
                     sx={{
@@ -239,6 +240,7 @@ const Main:NextPage = () => {
                       rows.map((row,key_row)=>{
                         return(
                           <Grid
+                            key={key_row}
                             sx={{
                               border:1,
                               flexGrow:1
