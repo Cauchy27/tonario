@@ -133,14 +133,14 @@ const Main:NextPage = () => {
 
   return(
     <div className='w-[100%] h-[100%]'>
-      <Typography variant='h2' textAlign={"center"} sx={{height:"100px"}}>tonario</Typography>
+      <Typography variant='h2' textAlign={"center"} sx={{height:"80px"}}>tonario</Typography>
       <Typography variant='h5' textAlign={"center"} sx={{height:"50px"}}>〜となりの人との交流を創出する 座席決めアプリ〜</Typography>
       <Grid
         container
         justifyContent={"center"}
         textAlign={"center"}
         overflow={"scroll"}
-        className='w-[100%] h-[calc(100%_-_150px)]'
+        className='w-[100%] h-[calc(100%_-_130px)]'
       >
         <Grid
           item
@@ -243,7 +243,7 @@ const Main:NextPage = () => {
                               flexGrow:1
                             }}
                             >
-                            {sittingMap[column-1]?(sittingMap[column-1][row-1]??"r"):"c"}
+                            {sittingMap[column-1][row-1]!=""?sittingMap[column-1][row-1]:"-"}
                           </Grid>
                         )
                       })
