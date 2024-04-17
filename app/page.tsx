@@ -5,19 +5,38 @@ import { useEffect, useState } from "react";
 
 import { Grid, Typography, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import CelebrationIcon from '@mui/icons-material/Celebration';
 
 import { NameList, CompatibillityToOthers } from './PropsType';
 import { NameBox } from './components/namebox';
 
+const getDefaultMap = () => {
+  let defaultMap:string[][] = []
+  columns.forEach((col,key_col)=>{
+    defaultMap.push([]);
+    rows.forEach(()=>{
+      defaultMap[key_col].push("")
+    })
+  })
+  return defaultMap;
+}
+
 const Main:NextPage = () => {
+  const defaultMap = getDefaultMap()
 
   const [NameList, setNameList] = useState<NameList[]>([]);
+  const [sittingMap, setSittingMap] = useState<string[][]>(defaultMap);
 
   // ロード時にローカルにデータを持っていれば呼び出し
   useEffect(()=>{
-    const loadDataJson:string = localStorage.getItem("name_list")??"";
-    if(loadDataJson != ""){
+    const loadListJson:string = localStorage.getItem("name_list")??"";
+    if(loadListJson != ""){
       setNameList(JSON.parse(localStorage.getItem("name_list")??""))
+    }
+
+    const loadMapJson:string = localStorage.getItem("sitting_map")??"";
+    if(loadMapJson != ""){
+      setSittingMap(JSON.parse(localStorage.getItem("sitting_map")??""))
     }
   },[])
 
@@ -48,7 +67,11 @@ const Main:NextPage = () => {
       username:"",
       power:5,
       compatibillity:CompatibillityToOthersArray,
-      check:true
+      check:true,
+      position:{
+        x:0,
+        y:0
+      }
     }
     newNameList.push(nameArray);
     setNameList(newNameList);
@@ -65,14 +88,44 @@ const Main:NextPage = () => {
           if(name3.to_uid == newNameArray.uid){
             name3.to_username = newNameArray.username
           }
-        })
+        });
       }
-    })
+    });
 
     newNameList[key] = newNameArray;
 
     setNameList(newNameList);
+    window.localStorage.setItem("name_list", JSON.stringify(newNameList));
+  }
 
+  // まずランダムに場所配置
+  const selectSeats = async() => {
+    let newNameList = [...NameList];
+    let rowsArray = [...rows];
+    let columnsArray = [...columns];
+
+    let newSittingMap = defaultMap;
+
+    // テーブルとか座れない場所を指定するためには、ここでその場所を削っておく
+
+    // 座席を取得
+    NameList.forEach((name,key)=>{
+      // x
+      const x_index = Math.floor(Math.random() * columnsArray.length);
+      newNameList[key].position.x = 10;
+      columnsArray.splice(x_index,1);
+
+      // y
+      const y_index = Math.floor(Math.random() * rowsArray.length);
+      newNameList[key].position.y = rowsArray[y_index];
+      rowsArray.splice(y_index,1);
+      
+      newSittingMap[x_index][y_index]=newNameList[key].username;
+    });
+    
+    setSittingMap(newSittingMap);
+    window.localStorage.setItem("sitting_map", JSON.stringify(newSittingMap));
+    setNameList(newNameList);
     window.localStorage.setItem("name_list", JSON.stringify(newNameList));
   }
 
@@ -90,31 +143,67 @@ const Main:NextPage = () => {
         <Grid
           item
           xs={12}
+          xl={11}
           md={3}
           sx={{
             bgcolor:"white",
-            display:"flex",
-            flexDirection:"column",
+            display:"flex"
           }}
         >
-          <Typography variant='h4' sx={{color:"black"}}>〜名前を入力〜</Typography>
-          {
-            NameList.map((name,key)=>{
-              return(
-                <NameBox
-                  key={key}
-                  id={key}
-                  data={name}
-                  updateNameList={updateNameList}
-                />
-              )
-            })
-          }
-          <Button
-            startIcon={<AddIcon/>}
-            onClick={()=>{addNameList()}}
+          <Grid
+            container
+            flexDirection={"column"}
+            overflow={"scroll"}
           >
-          </Button>
+            <Grid
+              item
+              xl={1}
+            >
+              <Typography variant='h4' sx={{color:"black"}}>〜名前を入力〜</Typography>
+            </Grid>
+            <Grid
+              item
+              xl={9}
+              sx={{
+                flexDirection:"column",
+                overflow:"scroll"
+              }}
+            >
+              {
+                NameList.map((name,key)=>{
+                  return(
+                    <NameBox
+                      key={key}
+                      id={key}
+                      data={name}
+                      updateNameList={updateNameList}
+                    />
+                  )
+                })
+              }
+              <Button
+                startIcon={<AddIcon/>}
+                onClick={()=>{addNameList()}}
+              >
+              </Button> 
+            </Grid>
+            <Grid
+                item
+                xl={1}
+            >
+              <Button
+                endIcon={<CelebrationIcon/>}
+                variant="contained"
+                color="secondary"
+                sx={{m:3, width:"50%"}}
+                onClick={()=>{
+                  selectSeats()
+                }}
+              >
+                席決め！
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid
           item
@@ -122,12 +211,53 @@ const Main:NextPage = () => {
           md={9}
           sx={{bgcolor:"blue"}}
         >
-          <Typography variant='h2'>ここに</Typography>
+          {/* <Typography variant='h2'>ここに</Typography> */}
+          <Grid
+            container
+            justifyContent={"center"}
+            flexDirection={"row"}
+            sx={{width:"100%",height:"100%"}}
+          >
+            {
+              columns.map((column,key_col)=>{
+                return(
+                  <Grid
+                    item
+                    xs={1}
+                    sx={{
+                      border:1,
+                      display:"flex",
+                      flexDirection:"column",
+                      justifyContent:"center",
+                    }}
+                    flexGrow={1}
+                  >
+                    {
+                      rows.map((row,key_row)=>{
+                        return(
+                          <Grid
+                            sx={{
+                              border:1,
+                              flexGrow:1
+                            }}
+                            >
+                            {sittingMap[column-1]?(sittingMap[column-1][row-1]??"r"):"c"}
+                          </Grid>
+                        )
+                      })
+                    }
+                  </Grid>
+                )
+              })
+            }
+          </Grid>
         </Grid>
-
       </Grid>
     </div>
   )
 }
+
+const rows:number[] = [1,2,3,4,5,6,7,8,9,10,11,12]
+const columns:number[] = [1,2,3,4,5,6,7,8,9,10,11,12]
 
 export default Main;
