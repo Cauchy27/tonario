@@ -110,17 +110,19 @@ const Main:NextPage = () => {
 
     // 座席を取得
     NameList.forEach((name,key)=>{
-      // x
-      const x_index = Math.floor(Math.random() * columnsArray.length);
-      newNameList[key].position.x = 10;
-      columnsArray.splice(x_index,1);
-
-      // y
-      const y_index = Math.floor(Math.random() * rowsArray.length);
-      newNameList[key].position.y = rowsArray[y_index];
-      rowsArray.splice(y_index,1);
-      
-      newSittingMap[x_index][y_index]=newNameList[key].username;
+      if(name.check){
+        // x
+        const x_index = Math.floor(Math.random() * columnsArray.length);
+        newNameList[key].position.x = 10;
+        columnsArray.splice(x_index,1);
+  
+        // y
+        const y_index = Math.floor(Math.random() * rowsArray.length);
+        newNameList[key].position.y = rowsArray[y_index];
+        rowsArray.splice(y_index,1);
+        
+        newSittingMap[x_index][y_index]=newNameList[key].username;
+      }
     });
     
     setSittingMap(newSittingMap);

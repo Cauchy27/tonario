@@ -28,12 +28,18 @@ const NameBox = (props:NameBoxProps) => {
     <Grid
       sx={{m:1}}
     >
-      <Checkbox 
-        defaultChecked
+      <Checkbox
+        defaultChecked={props.data.check} //ここはあんまり良くないかも
+        onChange={(event)=>{
+          let newNameArray = props.data;
+          newNameArray.check = event.target.checked;
+          props.updateNameList(props.id, newNameArray);
+        }}
       />
       <TextField
         defaultValue={props.data.username}
         variant="standard"
+        disabled={!props.data.check}
         onChange={(event)=>{
           let newNameArray = props.data;
           newNameArray.username = event.target.value;
@@ -42,6 +48,7 @@ const NameBox = (props:NameBoxProps) => {
       />
       <Button
         startIcon={<ExpandCircleDownIcon/>}
+        disabled={!props.data.check}
         onClick={()=>{openChange()}}
       />
       {
