@@ -112,14 +112,18 @@ const Main:NextPage = () => {
     NameList.forEach((name,key)=>{
       if(name.check){
         // x
-        const x_index = Math.floor(Math.random() * columnsArray.length);
+        let x_index = Math.floor(Math.random() * columnsArray.length);
+        while(!newSittingMap[x_index].includes("")){
+          x_index = Math.floor(Math.random() * columnsArray.length);
+        }
         newNameList[key].position.x = 10;
-        columnsArray.splice(x_index,1);
   
         // y
-        const y_index = Math.floor(Math.random() * rowsArray.length);
+        let y_index = Math.floor(Math.random() * rowsArray.length);
+        while(newSittingMap[x_index][y_index] != ""){
+          y_index = Math.floor(Math.random() * rowsArray.length);
+        }
         newNameList[key].position.y = rowsArray[y_index];
-        rowsArray.splice(y_index,1);
         
         newSittingMap[x_index][y_index]=newNameList[key].username;
       }
