@@ -116,7 +116,7 @@ const Main:NextPage = () => {
         while(!newSittingMap[x_index].includes("")){
           x_index = Math.floor(Math.random() * columnsArray.length);
         }
-        newNameList[key].position.x = 10;
+        newNameList[key].position.x = columnsArray[x_index];
   
         // y
         let y_index = Math.floor(Math.random() * rowsArray.length);
