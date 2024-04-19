@@ -112,74 +112,116 @@ const Main:NextPage = () => {
     // window.localStorage.setItem("sitting_map", JSON.stringify(newSittingMap));
   }
 
-  // まずランダムに場所配置
+  // 座席マッチング
   const selectSeats = async() => {
-    let newNameList = [...NameList];
+    let newNameList= [...NameList];
     let rowsArray = [...rows];
     let columnsArray = [...columns];
 
     // バツは保存しておく
-    let newSittingMap = sittingMap.map((row)=>{
+    let newSittingMap= sittingMap.map((row)=>{
       let rowOutput:string[] 
       rowOutput = row.map((cell:string)=>{
         return cell == "×"?"×":"";
       });
       return rowOutput;
     })
+
+    // リセット用
+    const newSittingMapCopy = JSON.parse(JSON.stringify(newSittingMap));
+    const newNameListCopy = JSON.parse(JSON.stringify(newNameList));
     
-
-    // テーブルとか座れない場所を指定するためには、ここでその場所を削っておく
-
     let noSeatCount=0;
-    // 座席を取得
-    NameList.forEach((name,key)=>{
-      if(name.check){
-        // x
-        let x_index = Math.floor(Math.random() * columnsArray.length);
-        let test = 0;
-        while(!newSittingMap[x_index].includes("")){
-          if(test > rows.length*columns.length){
-            noSeatCount++;
-            x_index = rows.length;
-            break;
-          }
-          x_index = Math.floor(Math.random() * columnsArray.length);
-          test++
-        }
-        newNameList[key].position.x = columnsArray[x_index];
-  
-        // y
-        let y_index = Math.floor(Math.random() * rowsArray.length);
-        if(test <= rows.length*columns.length){
-          while(newSittingMap[x_index][y_index] != ""){
+    let maxMatchingPoint = 0;
+    let lastMatchingPoint = 0;
+    let matchingCount = 0;
+
+    // ランダムに配置
+    while((matchingCount < 10 || lastMatchingPoint < maxMatchingPoint) && matchingCount < 50){
+      lastMatchingPoint = 0;
+    // while(matchingCount<3){
+      newSittingMap = JSON.parse(JSON.stringify(newSittingMapCopy));
+      newNameList = JSON.parse(JSON.stringify(newNameListCopy));
+      NameList.forEach((name,key)=>{
+        if(name.check){
+          // x
+          let x_index = Math.floor(Math.random() * columnsArray.length);
+          let test = 0;
+          while(!newSittingMap[x_index].includes("")){
             if(test > rows.length*columns.length){
               noSeatCount++;
-              y_index = columns.length;
+              x_index = rows.length;
               break;
             }
-            y_index = Math.floor(Math.random() * rowsArray.length);
-            test++;
+            x_index = Math.floor(Math.random() * columnsArray.length);
+            test++
           }
+          newNameList[key].position.x = columnsArray[x_index];
+          console.log(matchingCount,"x",newNameList[key].position.x);
+    
+          // y
+          let y_index = Math.floor(Math.random() * rowsArray.length);
+          if(test <= rows.length*columns.length){
+            while(newSittingMap[x_index][y_index] != ""){
+              if(test > rows.length*columns.length){
+                noSeatCount++;
+                y_index = columns.length;
+                break;
+              }
+              y_index = Math.floor(Math.random() * rowsArray.length);
+              test++;
+            }
+          }
+          else{
+            y_index = columns.length;
+          }
+          newNameList[key].position.y = rowsArray[y_index];
+          console.log(matchingCount,"y",newNameList[key].position.y);
+          
+          if(test <= rows.length*columns.length){
+            newSittingMap[x_index][y_index]=newNameList[key].username;
+          }
+          // console.log(test, rows.length*columns.length);
+          // console.log(newSittingMap, newNameList);
         }
-        else{
-          y_index = columns.length;
-        }
-        newNameList[key].position.y = rowsArray[y_index];
-        
-        if(test <= rows.length*columns.length){
-          newSittingMap[x_index][y_index]=newNameList[key].username;
-        }
+      });
+      if(noSeatCount > 0){
+        alert(noSeatCount + "：座れていない人がいます...");
+        console.log("count",matchingCount,maxMatchingPoint);
+        matchingCount = 100;
+        // break;
       }
-    });
+
+      // マッチングポイントを計算：距離 * 相手への相性*権力
+      newNameList.map((name)=>{
+        name.compatibillity.map((partner)=>{
+          const partnerData = newNameList.find((val)=>val.uid == partner.to_uid);
+          console.log(partnerData);
+          if(partnerData){
+            lastMatchingPoint += (name.power * partner.point)^2 + ((partnerData.position.x,name.position.x - partnerData.position.x)^2+(name.position.y - partnerData.position.y)^2);
+          }
+          else{
+            lastMatchingPoint = 0;
+          }
+        })
+      });
+      if(lastMatchingPoint >= maxMatchingPoint){
+        maxMatchingPoint = lastMatchingPoint;
+      }
+      console.log("matchingPoint",lastMatchingPoint);
+      matchingCount++;
+    }
+    if(matchingCount >= 50){
+      alert("座席マッチングに失敗しました...")
+    }
+    else{
+      console.log("success",maxMatchingPoint);
+    }
     
     setSittingMap(newSittingMap);
     window.localStorage.setItem("sitting_map", JSON.stringify(newSittingMap));
     setNameList(newNameList);
     window.localStorage.setItem("name_list", JSON.stringify(newNameList));
-
-    if(noSeatCount > 0){
-      alert("座れていない人がいます...");
-    }
   }
 
   // 座席にポイント指定
