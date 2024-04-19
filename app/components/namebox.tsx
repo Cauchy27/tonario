@@ -57,7 +57,15 @@ const NameBox = (props:NameBoxProps) => {
           <TextField
             label={props.data.username + "の権力[1-10]"}
             defaultValue={props.data.power}
+            required
             onChange={(event)=>{
+              if(Number(event.target.value) > 10){
+                event.target.value = "10";
+              }
+              if(isNaN(Number(event.target.value) )){
+                event.target.value = "0";
+              }
+
               let newNameArray = props.data;
               newNameArray.power = Math.round(Number(event.target.value));
               props.updateNameList(props.id, newNameArray);
@@ -72,7 +80,14 @@ const NameBox = (props:NameBoxProps) => {
                   key={key}
                   label={comp.to_username + "への好感度[1-100]"}
                   defaultValue={comp.point}
+                  required
                   onChange={(event)=>{
+                    if(Number(event.target.value) > 100){
+                      event.target.value = "100";
+                    }
+                    if(isNaN(Number(event.target.value) )){
+                      event.target.value = "0";
+                    }
                     let newNameArray = props.data;
                     newNameArray.compatibillity[key].point = Math.round(Number(event.target.value));
                     props.updateNameList(props.id, newNameArray);
