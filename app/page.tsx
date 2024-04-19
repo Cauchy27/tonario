@@ -130,13 +130,13 @@ const Main:NextPage = () => {
 
     // テーブルとか座れない場所を指定するためには、ここでその場所を削っておく
 
+    let noSeatCount=0;
     // 座席を取得
     NameList.forEach((name,key)=>{
       if(name.check){
         // x
         let x_index = Math.floor(Math.random() * columnsArray.length);
         let test = 0;
-        let noSeatCount=0;
         while(!newSittingMap[x_index].includes("")){
           if(test > 100){
             noSeatCount++;
@@ -176,6 +176,10 @@ const Main:NextPage = () => {
     window.localStorage.setItem("sitting_map", JSON.stringify(newSittingMap));
     setNameList(newNameList);
     window.localStorage.setItem("name_list", JSON.stringify(newNameList));
+
+    if(noSeatCount > 0){
+      alert("座れていない人がいます...");
+    }
   }
 
   // 座席にポイント指定
