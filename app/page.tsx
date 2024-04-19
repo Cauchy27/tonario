@@ -138,9 +138,9 @@ const Main:NextPage = () => {
         let x_index = Math.floor(Math.random() * columnsArray.length);
         let test = 0;
         while(!newSittingMap[x_index].includes("")){
-          if(test > 100){
+          if(test > rows.length*columns.length){
             noSeatCount++;
-            x_index = 11;
+            x_index = rows.length;
             break;
           }
           x_index = Math.floor(Math.random() * columnsArray.length);
@@ -150,11 +150,11 @@ const Main:NextPage = () => {
   
         // y
         let y_index = Math.floor(Math.random() * rowsArray.length);
-        if(test <= 100){
+        if(test <= rows.length*columns.length){
           while(newSittingMap[x_index][y_index] != ""){
-            if(test > 100){
+            if(test > rows.length*columns.length){
               noSeatCount++;
-              y_index = 11;
+              y_index = columns.length;
               break;
             }
             y_index = Math.floor(Math.random() * rowsArray.length);
@@ -162,11 +162,11 @@ const Main:NextPage = () => {
           }
         }
         else{
-          y_index = 11;
+          y_index = columns.length;
         }
         newNameList[key].position.y = rowsArray[y_index];
         
-        if(test <= 100){
+        if(test <= rows.length*columns.length){
           newSittingMap[x_index][y_index]=newNameList[key].username;
         }
       }
