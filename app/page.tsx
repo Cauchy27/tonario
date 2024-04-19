@@ -137,7 +137,7 @@ const Main:NextPage = () => {
     let matchingCount = 0;
 
     // ランダムに配置
-    while((matchingCount < 10 || lastMatchingPoint < maxMatchingPoint) && matchingCount < 50){
+    while((matchingCount < 10 || lastMatchingPoint < maxMatchingPoint) && matchingCount < 100){
       lastMatchingPoint = 0;
     // while(matchingCount<3){
       newSittingMap = JSON.parse(JSON.stringify(newSittingMapCopy));
@@ -188,17 +188,20 @@ const Main:NextPage = () => {
       if(noSeatCount > 0){
         alert(noSeatCount + "：座れていない人がいます...");
         console.log("count",matchingCount,maxMatchingPoint);
-        matchingCount = 100;
-        // break;
+        break;
       }
 
       // マッチングポイントを計算：距離 * 相手への相性*権力
       newNameList.map((name)=>{
         name.compatibillity.map((partner)=>{
           const partnerData = newNameList.find((val)=>val.uid == partner.to_uid);
-          console.log(partnerData);
+          // console.log(partnerData);
           if(partnerData){
-            lastMatchingPoint += (name.power * partner.point)^2 + ((partnerData.position.x,name.position.x - partnerData.position.x)^2+(name.position.y - partnerData.position.y)^2);
+            lastMatchingPoint += (name.power * partner.point)^2 / ((name.position.x - partnerData.position.x)^2+(name.position.y - partnerData.position.y)^2);
+
+            // console.log(name.username, partner.to_username, (name.power * partner.point)^2 / ((partnerData.position.x,name.position.x - partnerData.position.x)^2+(name.position.y - partnerData.position.y)^2))
+            // console.log("x:",(name.position.x - partnerData.position.x)^2);
+            // console.log("y:",(name.position.y - partnerData.position.y)^2);
           }
           else{
             lastMatchingPoint = 0;
