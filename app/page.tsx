@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Grid, Typography, Button } from '@mui/material';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import CelebrationIcon from '@mui/icons-material/Celebration';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 
 import { NameList, CompatibillityToOthers } from './PropsType';
 import { NameBox } from './components/namebox';
@@ -181,8 +182,6 @@ const Main:NextPage = () => {
           if(test <= rows.length*columns.length){
             newSittingMap[x_index][y_index]=newNameList[key].username;
           }
-          // console.log(test, rows.length*columns.length);
-          // console.log(newSittingMap, newNameList);
         }
       });
       if(noSeatCount > 0){
@@ -248,7 +247,7 @@ const Main:NextPage = () => {
   return(
     <div className='w-[100%] h-[100%]'>
       <Typography variant='h2' textAlign={"center"} sx={{height:"80px"}}>tonario</Typography>
-      <Typography variant='h5' textAlign={"center"} sx={{height:"50px"}}>〜となりの人との交流を創出する 座席決めアプリ〜</Typography>
+      <Typography variant='h5' textAlign={"center"} sx={{height:"60px"}}>〜となりの人との交流を創出する 座席決めアプリ〜</Typography>
       <Grid
         container
         justifyContent={"center"}
@@ -321,8 +320,8 @@ const Main:NextPage = () => {
                 席決め！
               </Button>
               <Button
-                endIcon={<CelebrationIcon/>}
-                variant="contained"
+                endIcon={<RestartAltIcon/>}
+                variant="outlined"
                 color="error"
                 sx={{m:3, mt:1, width:"50%"}}
                 onClick={()=>{
