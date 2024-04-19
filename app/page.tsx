@@ -196,7 +196,7 @@ const Main:NextPage = () => {
           const partnerData = newNameList.find((val)=>val.uid == partner.to_uid);
           // console.log(partnerData);
           if(partnerData){
-            lastMatchingPoint += name.power *(partner.point)^2 / ((name.position.x - partnerData.position.x)^2+(name.position.y - partnerData.position.y)^2);
+            lastMatchingPoint += name.power *(partner.point)^4 / ((name.position.x - partnerData.position.x)^4+(name.position.y - partnerData.position.y)^4);
 
             // console.log(name.username, partner.to_username, (name.power * partner.point)^2 / ((partnerData.position.x,name.position.x - partnerData.position.x)^2+(name.position.y - partnerData.position.y)^2))
             // console.log("x:",(name.position.x - partnerData.position.x)^2);
