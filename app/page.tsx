@@ -15,7 +15,7 @@ const getDefaultMap = () => {
   columns.forEach((col,key_col)=>{
     defaultMap.push([]);
     rows.forEach(()=>{
-      defaultMap[key_col].push("")
+      defaultMap[key_col].push("×")
     })
   })
   return defaultMap;
@@ -26,6 +26,8 @@ const Main:NextPage = () => {
 
   const [NameList, setNameList] = useState<NameList[]>([]);
   const [sittingMap, setSittingMap] = useState<string[][]>(defaultMap);
+
+  // const [mapLength, setMapLenght] = useState<number>(10);
 
   // ロード時にローカルにデータを持っていれば呼び出し
   useEffect(()=>{
@@ -38,6 +40,11 @@ const Main:NextPage = () => {
     if(loadMapJson != ""){
       setSittingMap(JSON.parse(localStorage.getItem("sitting_map")??""))
     }
+
+    // const loadMapLength:string = localStorage.getItem("mapLength")??"";
+    // if(loadMapLength != ""){
+    //   setMapLenght(JSON.parse(localStorage.getItem("mapLength")??""))
+    // }
   },[])
 
   const addNameList = () => {
@@ -98,13 +105,28 @@ const Main:NextPage = () => {
     window.localStorage.setItem("name_list", JSON.stringify(newNameList));
   }
 
+  // 盤面リセット
+  const resetSeats = () => {
+    const newSittingMap = defaultMap;
+    setSittingMap(newSittingMap);
+    // window.localStorage.setItem("sitting_map", JSON.stringify(newSittingMap));
+  }
+
   // まずランダムに場所配置
   const selectSeats = async() => {
     let newNameList = [...NameList];
     let rowsArray = [...rows];
     let columnsArray = [...columns];
 
-    let newSittingMap = defaultMap;
+    // バツは保存しておく
+    let newSittingMap = sittingMap.map((row)=>{
+      let rowOutput:string[] 
+      rowOutput = row.map((cell:string)=>{
+        return cell == "×"?"×":"";
+      });
+      return rowOutput;
+    })
+    
 
     // テーブルとか座れない場所を指定するためには、ここでその場所を削っておく
 
@@ -113,19 +135,40 @@ const Main:NextPage = () => {
       if(name.check){
         // x
         let x_index = Math.floor(Math.random() * columnsArray.length);
+        let test = 0;
+        let noSeatCount=0;
         while(!newSittingMap[x_index].includes("")){
+          if(test > 100){
+            noSeatCount++;
+            x_index = 11;
+            break;
+          }
           x_index = Math.floor(Math.random() * columnsArray.length);
+          test++
         }
         newNameList[key].position.x = columnsArray[x_index];
   
         // y
         let y_index = Math.floor(Math.random() * rowsArray.length);
-        while(newSittingMap[x_index][y_index] != ""){
-          y_index = Math.floor(Math.random() * rowsArray.length);
+        if(test <= 100){
+          while(newSittingMap[x_index][y_index] != ""){
+            if(test > 100){
+              noSeatCount++;
+              y_index = 11;
+              break;
+            }
+            y_index = Math.floor(Math.random() * rowsArray.length);
+            test++;
+          }
+        }
+        else{
+          y_index = 11;
         }
         newNameList[key].position.y = rowsArray[y_index];
         
-        newSittingMap[x_index][y_index]=newNameList[key].username;
+        if(test <= 100){
+          newSittingMap[x_index][y_index]=newNameList[key].username;
+        }
       }
     });
     
@@ -133,6 +176,24 @@ const Main:NextPage = () => {
     window.localStorage.setItem("sitting_map", JSON.stringify(newSittingMap));
     setNameList(newNameList);
     window.localStorage.setItem("name_list", JSON.stringify(newNameList));
+  }
+
+  // 座席にポイント指定
+  const seatStatusChange = (col:number,row:number) => {
+    let newSittingMap = [...sittingMap];
+
+    switch(sittingMap[col][row]){
+      case "×":
+        newSittingMap[col][row] = "";
+        break;
+
+      case "":
+        newSittingMap[col][row] = "×";
+        break;
+    }
+    
+    setSittingMap(newSittingMap);
+    window.localStorage.setItem("sitting_map", JSON.stringify(newSittingMap));
   }
 
   return(
@@ -203,12 +264,23 @@ const Main:NextPage = () => {
                 endIcon={<CelebrationIcon/>}
                 variant="contained"
                 color="secondary"
-                sx={{m:3, width:"50%"}}
+                sx={{m:3, mb:1, width:"50%"}}
                 onClick={()=>{
                   selectSeats()
                 }}
               >
                 席決め！
+              </Button>
+              <Button
+                endIcon={<CelebrationIcon/>}
+                variant="contained"
+                color="error"
+                sx={{m:3, mt:1, width:"50%"}}
+                onClick={()=>{
+                  resetSeats()
+                }}
+              >
+                リセット
               </Button>
               <Typography variant='h6' sx={{color:"black"}}>※座席決めは現在開発中のため、<br/>完全ランダムとなっています。</Typography>
             </Grid>
@@ -252,7 +324,20 @@ const Main:NextPage = () => {
                               flexGrow:1
                             }}
                             >
-                            {sittingMap[column-1][row-1]!=""?sittingMap[column-1][row-1]:"-"}
+                              <Button 
+                                onClick={()=>{
+                                  console.log("click!")
+                                  seatStatusChange(key_col, key_row);
+                                }}
+                                sx={{
+                                  color:sittingMap[key_col][key_row]==""?"white":"black",
+                                  bgcolor:sittingMap[key_col][key_row]==""?"blue":(sittingMap[key_col][key_row]=="×"?"white":"#ff8c00"),
+                                  width:"100%",
+                                  height:"100%"
+                                }}
+                              >
+                                {sittingMap[key_col][key_row]!=""?sittingMap[key_col][key_row]:"⚪︎"}
+                              </Button>
                           </Grid>
                         )
                       })
@@ -268,7 +353,7 @@ const Main:NextPage = () => {
   )
 }
 
-const rows:number[] = [1,2,3,4,5,6,7,8,9,10,11,12]
-const columns:number[] = [1,2,3,4,5,6,7,8,9,10,11,12]
+const rows:number[] = [1,2,3,4,5,6,7,8,9,10];
+const columns:number[] = [1,2,3,4,5,6,7,8,9,10];
 
 export default Main;
