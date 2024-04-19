@@ -246,8 +246,8 @@ const Main:NextPage = () => {
 
   return(
     <div className='w-[100%] h-[100%]'>
-      <Typography variant='h2' textAlign={"center"} sx={{height:"80px"}}>tonario</Typography>
-      <Typography variant='h5' textAlign={"center"} sx={{height:"60px"}}>〜となりの人との交流を創出する 座席決めアプリ〜</Typography>
+      <Typography variant='h2' textAlign={"center"} sx={{height:"80px", color:"white"}}>tonario</Typography>
+      <Typography variant='h5' textAlign={"center"} sx={{height:"60px", color:"white"}}>〜となりの人との交流を創出する 座席決めアプリ〜</Typography>
       <Grid
         container
         justifyContent={"center"}
@@ -361,6 +361,7 @@ const Main:NextPage = () => {
                       display:"flex",
                       flexDirection:"column",
                       justifyContent:"center",
+                      borderColor:"#c0c6c9",
                     }}
                     flexGrow={1}
                   >
@@ -371,7 +372,9 @@ const Main:NextPage = () => {
                             key={key_row}
                             sx={{
                               border:1,
-                              flexGrow:1
+                              flexGrow:1,
+                              bgcolor:"#c0c6c9",
+                              borderColor:"#c0c6c9",
                             }}
                             >
                               <Button 

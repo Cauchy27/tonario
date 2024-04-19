@@ -15,8 +15,8 @@ type MainProps = {
 
 const RootLayout = (props:MainProps) => {
   return (
-    <html lang="ja" className='w-[100%] h-[100%]' >
-      <body className="w-[100%] h-[100%]">
+    <html lang="ja" className='w-[100%] h-[100%] bg-gray-900' >
+      <body className="w-[100%] h-[100%] bg-gray-900">
         {props.children}
       </body>
     </html>
