@@ -330,7 +330,9 @@ const Main:NextPage = () => {
               >
                 リセット
               </Button>
-              <Typography variant='h6' sx={{color:"black"}}>※独自の座席マッチングロジックによって最適化されます。</Typography>
+              <Typography variant='h6' sx={{color:"black", textAlign:"center"}}>※独自の座席マッチングロジックによって最適化されます。</Typography><br/>
+              <Typography variant='button' sx={{color:"black",textAlign:"left"}}>マスを押すと⚪︎・×を切り替えられます。</Typography><br/>
+              <Typography variant='button' sx={{color:"black",textAlign:"left"}}>⚪︎のマス＝座席です。</Typography>
             </Grid>
           </Grid>
         </Grid>

@@ -1,3 +1,13 @@
+マッチングのロジック
+- ランダムに配置
+- 権力・相手への好感度・相手との距離からポイントを算出
+- 全員の組み合わせにわたって足し上げる
+- 以上を10回繰り返し、最高得点を記録
+- 以降、最高得点を更新する組み合わせが出るまで繰り返し、出たら配置確定
+
+
+
+---
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
