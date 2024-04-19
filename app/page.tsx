@@ -22,7 +22,7 @@ const getDefaultMap = () => {
 }
 
 const Main:NextPage = () => {
-  const defaultMap = getDefaultMap()
+  const defaultMap = getDefaultMap();
 
   const [NameList, setNameList] = useState<NameList[]>([]);
   const [sittingMap, setSittingMap] = useState<string[][]>(defaultMap);
@@ -360,7 +360,7 @@ const Main:NextPage = () => {
                     }}
                     flexGrow={1}
                   >
-                    {
+                    { sittingMap[key_col] &&
                       rows.map((row,key_row)=>{
                         return(
                           <Grid
