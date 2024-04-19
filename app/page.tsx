@@ -331,7 +331,7 @@ const Main:NextPage = () => {
               >
                 リセット
               </Button>
-              <Typography variant='h6' sx={{color:"black"}}>※座席決めは現在開発中のため、<br/>完全ランダムとなっています。</Typography>
+              <Typography variant='h6' sx={{color:"black"}}>※座席決めは、独自の座席マッチングロジックによって最適化されます。</Typography>
             </Grid>
           </Grid>
         </Grid>
