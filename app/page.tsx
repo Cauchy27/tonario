@@ -247,7 +247,7 @@ const Main:NextPage = () => {
   return(
     <div className='w-[100%] h-[100%]'>
       <Typography variant='h2' textAlign={"center"} sx={{height:"80px", color:"white"}}>tonario</Typography>
-      <Typography variant='h5' textAlign={"center"} sx={{height:"60px", color:"white"}}>〜となりの人との交流を創出する 座席決めアプリ〜</Typography>
+      <Typography variant='h6' textAlign={"center"} sx={{height:"60px", color:"white"}}>〜となりの人との交流を創出する 座席決めアプリ〜</Typography>
       <Grid
         container
         justifyContent={"center"}
@@ -342,7 +342,6 @@ const Main:NextPage = () => {
           md={9}
           sx={{bgcolor:"blue"}}
         >
-          {/* <Typography variant='h2'>ここに</Typography> */}
           <Grid
             container
             justifyContent={"center"}
@@ -386,10 +385,22 @@ const Main:NextPage = () => {
                                   color:sittingMap[key_col][key_row]==""?"white":"black",
                                   bgcolor:sittingMap[key_col][key_row]==""?"blue":(sittingMap[key_col][key_row]=="×"?"white":"#ff8c00"),
                                   width:"100%",
-                                  height:"100%"
+                                  height:"100%",
+                                  minHeight:"40px",
+                                  minWidth:"40px",
                                 }}
+                                size="small"
                               >
-                                {sittingMap[key_col][key_row]!=""?sittingMap[key_col][key_row]:"⚪︎"}
+                                <p
+                                  style={{
+                                    overflow:"hidden",
+                                    whiteSpace:"nowrap",
+                                    // textOverflow:"ellipsis",
+                                    textAlign:"left",
+                                  }}
+                                >
+                                  {sittingMap[key_col][key_row]!=""?sittingMap[key_col][key_row]:"⚪︎"}
+                                </p>
                               </Button>
                           </Grid>
                         )

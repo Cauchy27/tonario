@@ -28,6 +28,7 @@ const NameBox = (props:NameBoxProps) => {
     <Grid
       sx={{m:1}}
     >
+      <Typography variant="button" sx={{color:"black"}}>{props.id + 1}</Typography>
       <Checkbox
         defaultChecked={props.data.check} //ここはあんまり良くないかも
         onChange={(event)=>{
