@@ -28,6 +28,8 @@ const Main:NextPage = () => {
   const [NameList, setNameList] = useState<NameList[]>([]);
   const [sittingMap, setSittingMap] = useState<string[][]>(defaultMap);
 
+  const [windowWidth, setWindowWidth] = useState<number>(0);
+
   // const [mapLength, setMapLenght] = useState<number>(10);
 
   // ロード時にローカルにデータを持っていれば呼び出し
@@ -46,6 +48,9 @@ const Main:NextPage = () => {
     // if(loadMapLength != ""){
     //   setMapLenght(JSON.parse(localStorage.getItem("mapLength")??""))
     // }
+
+    console.log( window.innerWidth,  window.innerHeight);
+    setWindowWidth(window.innerWidth);
   },[])
 
   const addNameList = () => {
@@ -386,21 +391,24 @@ const Main:NextPage = () => {
                                   bgcolor:sittingMap[key_col][key_row]==""?"blue":(sittingMap[key_col][key_row]=="×"?"white":"#ff8c00"),
                                   width:"100%",
                                   height:"100%",
-                                  minHeight:"40px",
-                                  minWidth:"40px",
+                                  minHeight:"30px",
+                                  minWidth:"30px",
                                 }}
                                 size="small"
                               >
-                                <p
-                                  style={{
+                                <Grid
+                                  sx={{
                                     overflow:"hidden",
                                     whiteSpace:"nowrap",
                                     // textOverflow:"ellipsis",
                                     textAlign:"left",
+                                    fontSize:windowWidth>800?"auto":"10px"
                                   }}
                                 >
-                                  {sittingMap[key_col][key_row]!=""?sittingMap[key_col][key_row]:"⚪︎"}
-                                </p>
+                                  { windowWidth > 0 &&
+                                    sittingMap[key_col][key_row]!=""?sittingMap[key_col][key_row]:"⚪︎"
+                                  }
+                                </Grid>
                               </Button>
                           </Grid>
                         )
