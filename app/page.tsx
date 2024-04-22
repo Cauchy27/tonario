@@ -218,7 +218,7 @@ const Main:NextPage = () => {
       console.log("matchingPoint",lastMatchingPoint);
       matchingCount++;
     }
-    if(matchingCount >= 50){
+    if(matchingCount >= 100){
       alert("座席マッチングに失敗しました...\nもう一度、お試しください。")
     }
     else{
